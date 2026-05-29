@@ -4,8 +4,8 @@ import (
 	"errors"
 	"image"
 
-	"github.com/ajdnik/imghash/v2/hashtype"
-	"github.com/ajdnik/imghash/v2/similarity"
+	"github.com/xyxu/imghash/v2/hashtype"
+	"github.com/xyxu/imghash/v2/similarity"
 )
 
 // DistanceFunc computes a distance between two hashes.

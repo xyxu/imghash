@@ -1,7 +1,7 @@
 package similarity
 
 import (
-	"github.com/ajdnik/imghash/v2/hashtype"
+	"github.com/xyxu/imghash/v2/hashtype"
 )
 
 // ChiSquare calculates the chi-square distance between two hashes.

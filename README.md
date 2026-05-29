@@ -5,11 +5,11 @@
 <p align="center">Go implementation of multiple perceptual hash algorithms for images.</p>
 
 <p align="center">
-  <a href="https://github.com/ajdnik/imghash/actions?query=workflow%3Aci"><img src="https://github.com/ajdnik/imghash/workflows/ci/badge.svg" alt="CI status"></a>
-  <a href="https://coveralls.io/github/ajdnik/imghash?branch=main"><img src="https://badge.coveralls.io/repos/github/ajdnik/imghash/badge.svg?branch=main" alt="Coverage status"></a>
-  <a href="https://pkg.go.dev/github.com/ajdnik/imghash/v2"><img src="https://pkg.go.dev/badge/github.com/ajdnik/imghash/v2.svg" alt="Go reference"></a>
-  <a href="https://goreportcard.com/report/github.com/ajdnik/imghash/v2"><img src="https://goreportcard.com/badge/github.com/ajdnik/imghash/v2" alt="Go report card"></a>
-  <a href="https://github.com/ajdnik/imghash/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey.svg" alt="MIT license"></a>
+  <a href="https://github.com/xyxu/imghash/actions?query=workflow%3Aci"><img src="https://github.com/xyxu/imghash/workflows/ci/badge.svg" alt="CI status"></a>
+  <a href="https://coveralls.io/github/xyxu/imghash?branch=main"><img src="https://badge.coveralls.io/repos/github/xyxu/imghash/badge.svg?branch=main" alt="Coverage status"></a>
+  <a href="https://pkg.go.dev/github.com/xyxu/imghash/v2"><img src="https://pkg.go.dev/badge/github.com/xyxu/imghash/v2.svg" alt="Go reference"></a>
+  <a href="https://goreportcard.com/report/github.com/xyxu/imghash/v2"><img src="https://goreportcard.com/badge/github.com/xyxu/imghash/v2" alt="Go report card"></a>
+  <a href="https://github.com/xyxu/imghash/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey.svg" alt="MIT license"></a>
   <a href="https://www.bestpractices.dev/projects/12605"><img src="https://www.bestpractices.dev/projects/12605/badge?v=2"></a>
 </p>
 
@@ -17,21 +17,21 @@
 
 Detailed documentation has moved to the Wiki:
 
-- [Wiki Home](https://github.com/ajdnik/imghash/wiki)
-- [Algorithms](https://github.com/ajdnik/imghash/wiki/Algorithms)
-- [Similarity Metrics](https://github.com/ajdnik/imghash/wiki/Similarity-Metrics)
-- [Convenience Functions](https://github.com/ajdnik/imghash/wiki/Convenience-Functions)
-- [Interpolation Methods](https://github.com/ajdnik/imghash/wiki/Interpolation-Methods)
-- [Migration Guide](https://github.com/ajdnik/imghash/wiki/Migration-Guide)
+- [Wiki Home](https://github.com/xyxu/imghash/wiki)
+- [Algorithms](https://github.com/xyxu/imghash/wiki/Algorithms)
+- [Similarity Metrics](https://github.com/xyxu/imghash/wiki/Similarity-Metrics)
+- [Convenience Functions](https://github.com/xyxu/imghash/wiki/Convenience-Functions)
+- [Interpolation Methods](https://github.com/xyxu/imghash/wiki/Interpolation-Methods)
+- [Migration Guide](https://github.com/xyxu/imghash/wiki/Migration-Guide)
 
 ## Installing
 
 ```sh
-go get -u github.com/ajdnik/imghash/v2
+go get -u github.com/xyxu/imghash/v2
 ```
 
 ```go
-import "github.com/ajdnik/imghash/v2"
+import "github.com/xyxu/imghash/v2"
 ```
 
 Most consumers only need the top-level `imghash` package. Core types (`Hash`, `Binary`, `UInt8`, `Float64`, `Distance`) are re-exported there.
@@ -46,7 +46,7 @@ package main
 import (
   "fmt"
 
-  "github.com/ajdnik/imghash/v2"
+  "github.com/xyxu/imghash/v2"
 )
 
 func main() {
@@ -100,14 +100,14 @@ func main() {
 | HOGHash | `UInt8` | Cosine |
 | RadialVariance | `UInt8` | L1 (Manhattan) |
 
-See [Algorithms](https://github.com/ajdnik/imghash/wiki/Algorithms) for options, defaults, references, and examples.
+See [Algorithms](https://github.com/xyxu/imghash/wiki/Algorithms) for options, defaults, references, and examples.
 
 ## Community
 
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Contributing Guide](CONTRIBUTING.md)
 - [Security Policy](SECURITY.md)
-- [Migration Guide](https://github.com/ajdnik/imghash/wiki/Migration-Guide)
+- [Migration Guide](https://github.com/xyxu/imghash/wiki/Migration-Guide)
 
 ## License
 

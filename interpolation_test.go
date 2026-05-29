@@ -3,7 +3,7 @@ package imghash_test
 import (
 	"testing"
 
-	"github.com/ajdnik/imghash/v2"
+	"github.com/xyxu/imghash/v2"
 )
 
 func TestInterpolation_String(t *testing.T) {

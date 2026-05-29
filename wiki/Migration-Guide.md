@@ -6,7 +6,7 @@ change in your code when migrating from v1.
 ## 1. Update the dependency
 
 ```bash
-go get github.com/ajdnik/imghash/v2@latest
+go get github.com/xyxu/imghash/v2@latest
 go mod tidy
 ```
 
@@ -58,7 +58,7 @@ Sentinel errors for programmatic checking:
 
 `imgproc` is no longer part of the public API surface.
 
-- v1: `github.com/ajdnik/imghash/imgproc`
+- v1: `github.com/xyxu/imghash/imgproc`
 - v2: use `imghash` interpolation constants directly (`imghash.Bilinear`,
   `imghash.Bicubic`, `imghash.BilinearExact`, ...).
 
@@ -66,7 +66,7 @@ Example:
 
 ```go
 // v1
-// import "github.com/ajdnik/imghash/imgproc"
+// import "github.com/xyxu/imghash/imgproc"
 // hash := imghash.NewAverageWithParams(16, 16, imgproc.Bilinear)
 
 // v2

@@ -1,4 +1,4 @@
-module github.com/ajdnik/imghash/v2
+module github.com/xyxu/imghash/v2
 
 go 1.25.0
 

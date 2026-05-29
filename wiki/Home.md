@@ -7,13 +7,13 @@ imghash is a Go implementation of multiple perceptual image hashing algorithms.
 Install:
 
 ```sh
-go get -u github.com/ajdnik/imghash/v2
+go get -u github.com/xyxu/imghash/v2
 ```
 
 Import:
 
 ```go
-import "github.com/ajdnik/imghash/v2"
+import "github.com/xyxu/imghash/v2"
 ```
 
 Quick start (PDQ):
@@ -24,7 +24,7 @@ package main
 import (
   "fmt"
 
-  "github.com/ajdnik/imghash/v2"
+  "github.com/xyxu/imghash/v2"
 )
 
 func main() {
@@ -62,7 +62,7 @@ func main() {
 
 ## Community
 
-- [Code of Conduct](https://github.com/ajdnik/imghash/blob/main/CODE_OF_CONDUCT.md)
-- [Contributing Guide](https://github.com/ajdnik/imghash/blob/main/CONTRIBUTING.md)
-- [Security Policy](https://github.com/ajdnik/imghash/blob/main/SECURITY.md)
+- [Code of Conduct](https://github.com/xyxu/imghash/blob/main/CODE_OF_CONDUCT.md)
+- [Contributing Guide](https://github.com/xyxu/imghash/blob/main/CONTRIBUTING.md)
+- [Security Policy](https://github.com/xyxu/imghash/blob/main/SECURITY.md)
 - [Migration Guide](Migration-Guide)

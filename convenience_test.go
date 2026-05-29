@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ajdnik/imghash/v2"
-	"github.com/ajdnik/imghash/v2/hashtype"
+	"github.com/xyxu/imghash/v2"
+	"github.com/xyxu/imghash/v2/hashtype"
 )
 
 func TestOpenImage_nonexistent(t *testing.T) {

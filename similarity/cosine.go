@@ -3,7 +3,7 @@ package similarity
 import (
 	"math"
 
-	"github.com/ajdnik/imghash/v2/hashtype"
+	"github.com/xyxu/imghash/v2/hashtype"
 )
 
 // Cosine calculates the cosine distance between two hashes.

@@ -16,7 +16,7 @@ a pull request.
 ## Getting Started
 
 ```bash
-git clone https://github.com/ajdnik/imghash.git
+git clone https://github.com/xyxu/imghash.git
 cd imghash
 go mod download
 ```
@@ -81,7 +81,7 @@ must pass.
 
 ## Reporting Bugs & Requesting Features
 
-Open an [issue](https://github.com/ajdnik/imghash/issues) with a clear title
+Open an [issue](https://github.com/xyxu/imghash/issues) with a clear title
 and as much context as possible. For bugs, include the Go version, OS, a
 minimal reproducer, and the expected vs. actual behavior.
 

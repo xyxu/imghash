@@ -1,6 +1,6 @@
 package imghash
 
-import "github.com/ajdnik/imghash/v2/hashtype"
+import "github.com/xyxu/imghash/v2/hashtype"
 
 func validateBinaryCompareInputs(h1, h2 hashtype.Hash) error {
 	b1, ok := h1.(hashtype.Binary)

@@ -3,7 +3,7 @@ package similarity
 import (
 	"math"
 
-	"github.com/ajdnik/imghash/v2/hashtype"
+	"github.com/xyxu/imghash/v2/hashtype"
 )
 
 // L1 calculates the L1 (Manhattan) distance between two hashes.

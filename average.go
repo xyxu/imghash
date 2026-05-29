@@ -6,9 +6,9 @@ import (
 	"image"
 	"math"
 
-	"github.com/ajdnik/imghash/v2/hashtype"
-	"github.com/ajdnik/imghash/v2/internal/imgproc"
-	"github.com/ajdnik/imghash/v2/similarity"
+	"github.com/xyxu/imghash/v2/hashtype"
+	"github.com/xyxu/imghash/v2/internal/imgproc"
+	"github.com/xyxu/imghash/v2/similarity"
 )
 
 // Average is a perceptual hash that uses the method described in Looks Like It by Dr. Neal Krawetz.

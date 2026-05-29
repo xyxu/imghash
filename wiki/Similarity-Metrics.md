@@ -63,7 +63,7 @@ dist, err := imghash.Compare(h1, h2)
 The `similarity` sub-package provides all metrics for direct use:
 
 ```go
-import "github.com/ajdnik/imghash/v2/similarity"
+import "github.com/xyxu/imghash/v2/similarity"
 
 dist, err := similarity.Hamming(h1, h2)                 // bit-level Hamming distance (Binary only)
 dist, err = similarity.WeightedHamming(h1, h2, weights) // weighted Hamming (Binary only)

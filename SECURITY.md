@@ -14,7 +14,7 @@ Only the latest minor release receives security updates.
 **Please do not open a public issue for security vulnerabilities.**
 
 Instead, report them privately through
-[GitHub Security Advisories](https://github.com/ajdnik/imghash/security/advisories/new).
+[GitHub Security Advisories](https://github.com/xyxu/imghash/security/advisories/new).
 
 Include as much of the following as you can:
 

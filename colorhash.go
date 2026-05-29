@@ -7,9 +7,9 @@ import (
 	"math"
 	"math/big"
 
-	"github.com/ajdnik/imghash/v2/hashtype"
-	"github.com/ajdnik/imghash/v2/internal/imgproc"
-	"github.com/ajdnik/imghash/v2/similarity"
+	"github.com/xyxu/imghash/v2/hashtype"
+	"github.com/xyxu/imghash/v2/internal/imgproc"
+	"github.com/xyxu/imghash/v2/similarity"
 )
 
 const colorHashBins = 14

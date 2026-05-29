@@ -3,9 +3,9 @@ package imghash
 import (
 	"image"
 
-	"github.com/ajdnik/imghash/v2/hashtype"
-	"github.com/ajdnik/imghash/v2/internal/imgproc"
-	"github.com/ajdnik/imghash/v2/similarity"
+	"github.com/xyxu/imghash/v2/hashtype"
+	"github.com/xyxu/imghash/v2/internal/imgproc"
+	"github.com/xyxu/imghash/v2/similarity"
 )
 
 // ColorMoment is a perceptual hash that uses the method described in

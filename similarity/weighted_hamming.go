@@ -4,7 +4,7 @@ import (
 	"errors"
 	"math/bits"
 
-	"github.com/ajdnik/imghash/v2/hashtype"
+	"github.com/xyxu/imghash/v2/hashtype"
 )
 
 // ErrWeightLengthMismatch is reported when the weight slice length doesn't match the hash byte length.

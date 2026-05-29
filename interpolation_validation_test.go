@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/ajdnik/imghash/v2"
+	"github.com/xyxu/imghash/v2"
 )
 
 func TestWithInterpolation_invalidValue(t *testing.T) {

@@ -3,7 +3,7 @@ package similarity
 import (
 	"math/bits"
 
-	"github.com/ajdnik/imghash/v2/hashtype"
+	"github.com/xyxu/imghash/v2/hashtype"
 )
 
 // Jaccard calculates the Jaccard distance.
