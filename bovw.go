@@ -353,7 +353,7 @@ func bovwFASTScore(gray []uint8, w, x, y, threshold int) (float64, bool) {
 func bovwLongestCircularRun(mask [16]bool) int {
 	maxRun := 0
 	run := 0
-	for i := 0; i < 32; i++ {
+	for i := range 32 {
 		if mask[i%16] {
 			run++
 			if run > maxRun {
@@ -492,8 +492,8 @@ func bovwGrayToFlat(img *image.Gray) ([]uint8, int, int) {
 	w, h := bounds.Dx(), bounds.Dy()
 	flat := make([]uint8, w*h)
 	ox, oy := bounds.Min.X, bounds.Min.Y
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			flat[y*w+x] = img.GrayAt(x+ox, y+oy).Y
 		}
 	}
@@ -556,7 +556,7 @@ func bovwMix64(x uint64) uint64 {
 func bovwGeneratePairs(count, radius int, seed uint64) []bovwPair {
 	pairs := make([]bovwPair, count)
 	s := seed
-	for i := 0; i < count; i++ {
+	for i := range count {
 		s = bovwMix64(s)
 		x1 := int(s%uint64(2*radius+1)) - radius
 		s = bovwMix64(s)

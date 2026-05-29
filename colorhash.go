@@ -78,10 +78,7 @@ func (ch ColorHash) Calculate(img image.Image) (hashtype.Hash, error) {
 		}
 	}
 
-	denomColors := colorCount
-	if denomColors < 1 {
-		denomColors = 1
-	}
+	denomColors := max(colorCount, 1)
 	maxValue := 1 << ch.binBits
 	values := make([]int, 0, colorHashBins)
 	values = append(values, colorHashFractionValue(black, total, maxValue))

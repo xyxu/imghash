@@ -66,10 +66,10 @@ func (e EHD) computeHash(img *image.Gray) hashtype.UInt8 {
 	hash := make(hashtype.UInt8, ehdHashLen)
 	ox, oy := b.Min.X, b.Min.Y
 
-	for gy := 0; gy < ehdGridSize; gy++ {
+	for gy := range ehdGridSize {
 		y0 := gy * h / ehdGridSize
 		y1 := (gy + 1) * h / ehdGridSize
-		for gx := 0; gx < ehdGridSize; gx++ {
+		for gx := range ehdGridSize {
 			x0 := gx * w / ehdGridSize
 			x1 := (gx + 1) * w / ehdGridSize
 
@@ -109,7 +109,7 @@ func (e EHD) computeHash(img *image.Gray) hashtype.UInt8 {
 			if blocks == 0 {
 				continue
 			}
-			for i := 0; i < ehdEdgeTypes; i++ {
+			for i := range ehdEdgeTypes {
 				norm := hist[i] / blocks
 				hash[base+i] = quantizeEHD(norm, ehdQuantTable[i])
 			}

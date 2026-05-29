@@ -80,8 +80,8 @@ func (r RASH) ringMeans(img *image.Gray) []float64 {
 	sums := make([]float64, r.rings)
 	counts := make([]int, r.rings)
 
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			dx := float64(x) + 0.5 - cx
 			dy := float64(y) + 0.5 - cy
 			dist := math.Sqrt(dx*dx + dy*dy)
@@ -111,9 +111,9 @@ func (r RASH) computeHash(means []float64) (hashtype.Binary, error) {
 	dct := make([]float64, n)
 	c0 := math.Sqrt(1.0 / float64(n))
 	c1 := math.Sqrt(2.0 / float64(n))
-	for k := 0; k < n; k++ {
+	for k := range n {
 		var sum float64
-		for i := 0; i < n; i++ {
+		for i := range n {
 			sum += means[i] * math.Cos(math.Pi*float64(2*i+1)*float64(k)/float64(2*n))
 		}
 		if k == 0 {
@@ -123,10 +123,7 @@ func (r RASH) computeHash(means []float64) (hashtype.Binary, error) {
 		}
 	}
 
-	hashBits := rashHashBits
-	if n-1 < hashBits {
-		hashBits = n - 1
-	}
+	hashBits := min(n-1, rashHashBits)
 	if hashBits <= 0 {
 		return hashtype.NewBinary(0), nil
 	}

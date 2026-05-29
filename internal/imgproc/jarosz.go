@@ -11,17 +11,17 @@ func JaroszFilter(buf [][]float32, windowSize, nreps int) {
 	}
 	rows := len(buf)
 	cols := len(buf[0])
-	for i := 0; i < nreps; i++ {
+	for range nreps {
 		boxAlongRows(buf, rows, cols, windowSize)
 	}
-	for i := 0; i < nreps; i++ {
+	for range nreps {
 		boxAlongCols(buf, rows, cols, windowSize)
 	}
 }
 
 func boxAlongRows(buf [][]float32, rows, cols, windowSize int) {
 	w := float32(2*windowSize + 1)
-	for i := 0; i < rows; i++ {
+	for i := range rows {
 		row := buf[i]
 		s := row[0] * float32(windowSize)
 		for j := 1; j <= windowSize && j < cols; j++ {
@@ -47,7 +47,7 @@ func boxAlongRows(buf [][]float32, rows, cols, windowSize int) {
 
 func boxAlongCols(buf [][]float32, rows, cols, windowSize int) {
 	w := float32(2*windowSize + 1)
-	for j := 0; j < cols; j++ {
+	for j := range cols {
 		s := buf[0][j] * float32(windowSize)
 		for i := 1; i <= windowSize && i < rows; i++ {
 			s += buf[i][j]

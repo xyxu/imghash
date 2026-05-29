@@ -101,7 +101,7 @@ func (bh BlockMean) computeRotatedHash(img *image.Gray) (hashtype.Binary, error)
 		if err != nil {
 			return nil, err
 		}
-		for i := 0; i < len(means); i++ {
+		for i := range means {
 			if means[i] >= med {
 				_ = hash.Set(uint(bitOffset + i))
 			}
@@ -172,7 +172,7 @@ func (bh BlockMean) computeHash(means []float64, median float64) hashtype.Binary
 	mSize := len(means)
 	hSize := (mSize + 7) / 8
 	hash := make(hashtype.Binary, hSize)
-	for i := 0; i < mSize; i++ {
+	for i := range mSize {
 		if means[i] >= median {
 			_ = hash.Set(uint(i))
 		}

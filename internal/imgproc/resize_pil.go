@@ -11,7 +11,7 @@ const precisionBits = 22
 var clip8Table [1280]uint8
 
 func init() {
-	for i := 0; i < len(clip8Table); i++ {
+	for i := range len(clip8Table) {
 		v := i - 640
 		switch {
 		case v < 0:
@@ -59,20 +59,11 @@ func computeCoeffs(inSize int, outSize int) []coeffRow {
 	ksize := int(math.Ceil(support))*2 + 1
 
 	rows := make([]coeffRow, outSize)
-	for o := 0; o < outSize; o++ {
+	for o := range outSize {
 		center := (float64(o) + 0.5) * scale
-		xmin := int(math.Floor(center - support + 0.5))
-		if xmin < 0 {
-			xmin = 0
-		}
-		xmax := int(math.Floor(center + support + 0.5))
-		if xmax > inSize {
-			xmax = inSize
-		}
-		count := xmax - xmin
-		if count > ksize {
-			count = ksize
-		}
+		xmin := max(int(math.Floor(center-support+0.5)), 0)
+		xmax := min(int(math.Floor(center+support+0.5)), inSize)
+		count := min(xmax-xmin, ksize)
 
 		weights := make([]float64, count)
 		var wsum float64
@@ -104,15 +95,12 @@ func ResizePIL(gray *image.Gray, dstW, dstH int) *image.Gray {
 
 	yboxFirst := vCoef[0].offset
 	yboxLast := vCoef[len(vCoef)-1].offset + vCoef[len(vCoef)-1].count
-	tempH := yboxLast - yboxFirst
-	if tempH > srcH {
-		tempH = srcH
-	}
+	tempH := min(yboxLast-yboxFirst, srcH)
 
 	temp := image.NewGray(image.Rect(0, 0, dstW, tempH))
 	for yy := 0; yy < tempH; yy++ {
 		srcY := yy + yboxFirst
-		for xx := 0; xx < dstW; xx++ {
+		for xx := range dstW {
 			c := hCoef[xx]
 			acc := int32(1 << (precisionBits - 1))
 			for x := 0; x < c.count; x++ {
@@ -123,10 +111,10 @@ func ResizePIL(gray *image.Gray, dstW, dstH int) *image.Gray {
 	}
 
 	dst := image.NewGray(image.Rect(0, 0, dstW, dstH))
-	for yy := 0; yy < dstH; yy++ {
+	for yy := range dstH {
 		c := vCoef[yy]
 		adjOffset := c.offset - yboxFirst
-		for xx := 0; xx < dstW; xx++ {
+		for xx := range dstW {
 			acc := int32(1 << (precisionBits - 1))
 			for y := 0; y < c.count; y++ {
 				acc += int32(temp.GrayAt(xx, y+adjOffset).Y) * c.coeffs[y]

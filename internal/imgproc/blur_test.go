@@ -29,7 +29,7 @@ func equal(s1, s2 []float32) bool {
 		return false
 	}
 	eps := math.Nextafter(1.0, 2.0) - 1.0
-	for i := 0; i < len(s1); i++ {
+	for i := range s1 {
 		if math.Abs(float64(s1[i])-float64(s2[i])) > eps {
 			return false
 		}
@@ -50,8 +50,8 @@ func TestGetGaussianKernel(t *testing.T) {
 
 func TestGaussianBlur_gray(t *testing.T) {
 	img := image.NewGray(image.Rect(0, 0, 8, 8))
-	for x := 0; x < 8; x++ {
-		for y := 0; y < 8; y++ {
+	for x := range 8 {
+		for y := range 8 {
 			img.SetGray(x, y, color.Gray{uint8((x + y) * 10)})
 		}
 	}
@@ -63,8 +63,8 @@ func TestGaussianBlur_gray(t *testing.T) {
 
 func TestGaussianBlur_rgba(t *testing.T) {
 	img := image.NewRGBA(image.Rect(0, 0, 8, 8))
-	for x := 0; x < 8; x++ {
-		for y := 0; y < 8; y++ {
+	for x := range 8 {
+		for y := range 8 {
 			img.Set(x, y, color.RGBA{uint8(x * 10), uint8(y * 10), 100, 255})
 		}
 	}
@@ -76,8 +76,8 @@ func TestGaussianBlur_rgba(t *testing.T) {
 
 func TestGaussianBlur_autoKernel(t *testing.T) {
 	img := image.NewGray(image.Rect(0, 0, 8, 8))
-	for x := 0; x < 8; x++ {
-		for y := 0; y < 8; y++ {
+	for x := range 8 {
+		for y := range 8 {
 			img.SetGray(x, y, color.Gray{128})
 		}
 	}

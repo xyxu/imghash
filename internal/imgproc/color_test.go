@@ -16,8 +16,8 @@ func TestGrayscale_nil(t *testing.T) {
 
 func TestGrayscale_valid(t *testing.T) {
 	rgba := image.NewRGBA(image.Rect(0, 0, 3, 3))
-	for x := 0; x < 3; x++ {
-		for y := 0; y < 3; y++ {
+	for x := range 3 {
+		for y := range 3 {
 			rgba.Set(x, y, color.RGBA{uint8(x * 50), uint8(y * 80), 100, 255})
 		}
 	}

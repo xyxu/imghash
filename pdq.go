@@ -69,7 +69,7 @@ func (p PDQ) Calculate(img image.Image) (hashtype.Hash, error) {
 // extractBlock returns the top-left pdqCoefSize x pdqCoefSize block from the DCT output.
 func (p PDQ) extractBlock(dct [][]float32) [][]float32 {
 	block := make([][]float32, pdqCoefSize)
-	for i := 0; i < pdqCoefSize; i++ {
+	for i := range pdqCoefSize {
 		block[i] = make([]float32, pdqCoefSize)
 		copy(block[i], dct[i][:pdqCoefSize])
 	}

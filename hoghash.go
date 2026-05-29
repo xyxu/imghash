@@ -70,8 +70,8 @@ func (hh HOGHash) computeGradients(img *image.Gray, w, h int) ([]float64, []floa
 	oy := img.Bounds().Min.Y
 	mag := make([]float64, w*h)
 	orient := make([]float64, w*h)
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			var gx, gy float64
 			if x > 0 && x < w-1 {
 				gx = float64(img.GrayAt(x+1+ox, y+oy).Y) - float64(img.GrayAt(x-1+ox, y+oy).Y)
@@ -152,7 +152,7 @@ func (hh HOGHash) computeHash(mag, orient []float64, w, h int) hashtype.UInt8 {
 
 			offset := (cy*cellsX + cx) * nb
 			if maxVal > 0 {
-				for i := 0; i < nb; i++ {
+				for i := range nb {
 					hash[offset+i] = uint8(hist[i] * 255 / maxVal)
 				}
 			}

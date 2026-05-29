@@ -16,7 +16,7 @@ func GaussianBlur(img image.Image, kernel int, sigma float64) image.Image {
 	}
 	k := getGaussianKernel(kernel, sigma)
 	kernelInt := make([]int, len(k))
-	for i := 0; i < len(k); i++ {
+	for i := range k {
 		kernelInt[i] = int(k[i] * 256)
 	}
 	switch i := img.(type) {
@@ -45,7 +45,7 @@ func getGaussianKernel(size int, sigma float64) []float32 {
 	scale2x := -0.5 / (sigmaX * sigmaX)
 	kernel := make([]float32, size)
 	var sum float64
-	for i := 0; i < size; i++ {
+	for i := range size {
 		x := float64(i) - float64(size-1)*0.5
 		t := math.Exp(scale2x * x * x)
 		if size%2 == 1 && size <= smallGaussianSize && sigma <= 0 {
@@ -55,7 +55,7 @@ func getGaussianKernel(size int, sigma float64) []float32 {
 		sum += float64(kernel[i])
 	}
 	sum = 1 / sum
-	for i := 0; i < size; i++ {
+	for i := range size {
 		kernel[i] = float32(float64(kernel[i]) * sum)
 	}
 	return kernel

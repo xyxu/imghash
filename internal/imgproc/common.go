@@ -3,6 +3,7 @@ package imgproc
 import (
 	"image"
 	"math"
+	"slices"
 	"sort"
 )
 
@@ -63,7 +64,7 @@ func MedianF32(mat [][]float32) float32 {
 	for _, row := range mat {
 		vals = append(vals, row...)
 	}
-	sort.Slice(vals, func(i, j int) bool { return vals[i] < vals[j] })
+	slices.Sort(vals)
 	if n%2 == 0 {
 		return (vals[n/2-1] + vals[n/2]) / 2
 	}

@@ -179,7 +179,7 @@ func TestBlockMean_RotationIncludesRotatedSegments(t *testing.T) {
 
 	firstSegmentBits := len(directHash) * 8
 	segmentChanged := false
-	for i := 0; i < firstSegmentBits; i++ {
+	for i := range firstSegmentBits {
 		if binaryBit(rotationHash, i) != binaryBit(rotationHash, firstSegmentBits+i) {
 			segmentChanged = true
 			break
@@ -232,7 +232,7 @@ func TestBlockMean_RotationOverlapIncludesOverlapSegment(t *testing.T) {
 		t.Fatalf("rotation-overlap hash size mismatch: got %d bytes, want %d bytes", len(rotationOverlapHash), expectedRotationOverlapBytes)
 	}
 
-	for i := 0; i < overlapBits; i++ {
+	for i := range overlapBits {
 		if binaryBit(rotationOverlapHash, i) != binaryBit(overlapHash, i) {
 			t.Fatalf("overlap bit mismatch at index %d in 0-degree rotation-overlap segment", i)
 		}

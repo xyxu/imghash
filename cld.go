@@ -94,13 +94,13 @@ func (c CLD) layoutYCbCr(img image.Image) ([][]float32, [][]float32, [][]float32
 	y := make([][]float32, cldGridSize)
 	cb := make([][]float32, cldGridSize)
 	cr := make([][]float32, cldGridSize)
-	for i := 0; i < cldGridSize; i++ {
+	for i := range cldGridSize {
 		y[i] = make([]float32, cldGridSize)
 		cb[i] = make([]float32, cldGridSize)
 		cr[i] = make([]float32, cldGridSize)
 	}
 
-	for gy := 0; gy < cldGridSize; gy++ {
+	for gy := range cldGridSize {
 		y0 := gy * h / cldGridSize
 		y1 := (gy + 1) * h / cldGridSize
 		if y1 <= y0 {
@@ -109,7 +109,7 @@ func (c CLD) layoutYCbCr(img image.Image) ([][]float32, [][]float32, [][]float32
 			}
 			y1 = y0 + 1
 		}
-		for gx := 0; gx < cldGridSize; gx++ {
+		for gx := range cldGridSize {
 			x0 := gx * w / cldGridSize
 			x1 := (gx + 1) * w / cldGridSize
 			if x1 <= x0 {

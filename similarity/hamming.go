@@ -19,10 +19,7 @@ func Hamming(h1, h2 hashtype.Hash) (Distance, error) {
 	if !ok {
 		return 0, ErrNotBinaryHash
 	}
-	l := len(b1)
-	if len(b2) < l {
-		l = len(b2)
-	}
+	l := min(len(b2), len(b1))
 	var dist int
 	for i := 0; i < l; i++ {
 		dist += bits.OnesCount8(b1[i] ^ b2[i])

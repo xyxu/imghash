@@ -69,11 +69,11 @@ func (lh LBP) computeLBP(img *image.Gray, w, h int) []uint8 {
 	ox := img.Bounds().Min.X
 	oy := img.Bounds().Min.Y
 	result := make([]uint8, w*h)
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			center := img.GrayAt(x+ox, y+oy).Y
 			var code uint8
-			for k := 0; k < 8; k++ {
+			for k := range 8 {
 				nx, ny := x+lbpDX[k], y+lbpDY[k]
 				if nx >= 0 && nx < w && ny >= 0 && ny < h {
 					if img.GrayAt(nx+ox, ny+oy).Y >= center {
@@ -95,8 +95,8 @@ func (lh LBP) computeHash(lbpImg []uint8, w, h int) hashtype.UInt8 {
 	cellW := w / gx
 	cellH := h / gy
 
-	for cy := 0; cy < gy; cy++ {
-		for cx := 0; cx < gx; cx++ {
+	for cy := range gy {
+		for cx := range gx {
 			startX := cx * cellW
 			startY := cy * cellH
 			endX := startX + cellW
@@ -123,7 +123,7 @@ func (lh LBP) computeHash(lbpImg []uint8, w, h int) hashtype.UInt8 {
 
 			offset := (cy*gx + cx) * 256
 			if maxVal > 0 {
-				for i := 0; i < 256; i++ {
+				for i := range 256 {
 					hash[offset+i] = uint8(hist[i] * 255 / maxVal)
 				}
 			}

@@ -11,10 +11,7 @@ import (
 // cosine similarity (dot product divided by the product of magnitudes).
 // Returns 0 when both hashes are zero vectors.
 func Cosine(h1, h2 hashtype.Hash) (Distance, error) {
-	l := h1.Len()
-	if h2.Len() < l {
-		l = h2.Len()
-	}
+	l := min(h2.Len(), h1.Len())
 	var dot, mag1, mag2 float64
 	for i := 0; i < l; i++ {
 		a := h1.ValueAt(i)

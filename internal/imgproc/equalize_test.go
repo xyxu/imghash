@@ -8,8 +8,8 @@ import (
 
 func TestEqualizeHist(t *testing.T) {
 	img := image.NewGray(image.Rect(0, 0, 4, 4))
-	for x := 0; x < 4; x++ {
-		for y := 0; y < 4; y++ {
+	for x := range 4 {
+		for y := range 4 {
 			img.SetGray(x, y, color.Gray{uint8(x*16 + y*4)})
 		}
 	}
@@ -21,8 +21,8 @@ func TestEqualizeHist(t *testing.T) {
 
 func TestEqualizeHist_uniform(t *testing.T) {
 	img := image.NewGray(image.Rect(0, 0, 3, 3))
-	for x := 0; x < 3; x++ {
-		for y := 0; y < 3; y++ {
+	for x := range 3 {
+		for y := range 3 {
 			img.SetGray(x, y, color.Gray{100})
 		}
 	}

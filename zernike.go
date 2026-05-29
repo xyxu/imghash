@@ -112,10 +112,7 @@ func (z Zernike) computeHash(img *image.Gray) hashtype.Float64 {
 	if w == 0 || h == 0 {
 		return make(hashtype.Float64, len(orders)-1)
 	}
-	scale := w
-	if h < scale {
-		scale = h
-	}
+	scale := min(h, w)
 	if scale == 0 {
 		return make(hashtype.Float64, len(orders)-1)
 	}
@@ -125,9 +122,9 @@ func (z Zernike) computeHash(img *image.Gray) hashtype.Float64 {
 	ox := bounds.Min.X
 	oy := bounds.Min.Y
 
-	for y := 0; y < h; y++ {
+	for y := range h {
 		ny := (float64(y) - cy) / radius
-		for x := 0; x < w; x++ {
+		for x := range w {
 			nx := (float64(x) - cx) / radius
 			rho2 := nx*nx + ny*ny
 			if rho2 > 1 {

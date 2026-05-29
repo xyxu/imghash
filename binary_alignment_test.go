@@ -79,8 +79,8 @@ func TestBinaryHashers_NonByteAlignedCapacity(t *testing.T) {
 
 func testGradientGray(width, height int) *image.Gray {
 	img := image.NewGray(image.Rect(0, 0, width, height))
-	for y := 0; y < height; y++ {
-		for x := 0; x < width; x++ {
+	for y := range height {
+		for x := range width {
 			img.SetGray(x, y, color.Gray{Y: uint8((x*17 + y*13) % 256)})
 		}
 	}

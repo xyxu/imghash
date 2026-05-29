@@ -8,8 +8,8 @@ import (
 
 func TestGetMoments_gray(t *testing.T) {
 	img := image.NewGray(image.Rect(0, 0, 4, 4))
-	for x := 0; x < 4; x++ {
-		for y := 0; y < 4; y++ {
+	for x := range 4 {
+		for y := range 4 {
 			img.SetGray(x, y, color.Gray{uint8(x*10 + y*5 + 50)})
 		}
 	}
@@ -24,8 +24,8 @@ func TestGetMoments_gray(t *testing.T) {
 
 func TestGetMoments_rgba(t *testing.T) {
 	img := image.NewRGBA(image.Rect(0, 0, 3, 3))
-	for x := 0; x < 3; x++ {
-		for y := 0; y < 3; y++ {
+	for x := range 3 {
+		for y := range 3 {
 			img.Set(x, y, color.RGBA{uint8(x * 50), uint8(y * 80), 100, 255})
 		}
 	}
@@ -37,8 +37,8 @@ func TestGetMoments_rgba(t *testing.T) {
 
 func TestHuMoments(t *testing.T) {
 	img := image.NewGray(image.Rect(0, 0, 4, 4))
-	for x := 0; x < 4; x++ {
-		for y := 0; y < 4; y++ {
+	for x := range 4 {
+		for y := range 4 {
 			img.SetGray(x, y, color.Gray{uint8(x*20 + y*10 + 30)})
 		}
 	}
@@ -51,8 +51,8 @@ func TestHuMoments(t *testing.T) {
 
 func TestHuMoments_rgba(t *testing.T) {
 	img := image.NewRGBA(image.Rect(0, 0, 3, 3))
-	for x := 0; x < 3; x++ {
-		for y := 0; y < 3; y++ {
+	for x := range 3 {
+		for y := range 3 {
 			img.Set(x, y, color.RGBA{uint8(x*50 + 10), uint8(y*80 + 20), uint8(x*y*10 + 30), 255})
 		}
 	}

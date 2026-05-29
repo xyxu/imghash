@@ -33,8 +33,8 @@ func TestBorderReflect101(t *testing.T) {
 
 func TestFilter2DGray(t *testing.T) {
 	img := image.NewGray(image.Rect(0, 0, 3, 3))
-	for x := 0; x < 3; x++ {
-		for y := 0; y < 3; y++ {
+	for x := range 3 {
+		for y := range 3 {
 			img.SetGray(x, y, color.Gray{uint8((x + y) * 20)})
 		}
 	}
@@ -54,8 +54,8 @@ func TestFilter2DGray(t *testing.T) {
 
 func TestSepFilter2DGray(t *testing.T) {
 	img := image.NewGray(image.Rect(0, 0, 5, 5))
-	for x := 0; x < 5; x++ {
-		for y := 0; y < 5; y++ {
+	for x := range 5 {
+		for y := range 5 {
 			img.SetGray(x, y, color.Gray{128})
 		}
 	}
@@ -69,8 +69,8 @@ func TestSepFilter2DGray(t *testing.T) {
 
 func TestSepFilter2D(t *testing.T) {
 	img := image.NewRGBA(image.Rect(0, 0, 5, 5))
-	for x := 0; x < 5; x++ {
-		for y := 0; y < 5; y++ {
+	for x := range 5 {
+		for y := range 5 {
 			img.Set(x, y, color.RGBA{128, 128, 128, 255})
 		}
 	}

@@ -22,9 +22,9 @@ func dctOrthogonal(x []float64) []float64 {
 	c0 := math.Sqrt(1.0 / float64(n))
 	c1 := math.Sqrt(2.0 / float64(n))
 	result := make([]float64, n)
-	for k := 0; k < n; k++ {
+	for k := range n {
 		var sum float64
-		for i := 0; i < n; i++ {
+		for i := range n {
 			sum += x[i] * math.Cos(math.Pi*float64(2*i+1)*float64(k)/float64(2*n))
 		}
 		if k == 0 {
@@ -38,7 +38,7 @@ func dctOrthogonal(x []float64) []float64 {
 
 func matf32Tof64(mat [][]float32) [][]float64 {
 	res := make([][]float64, len(mat))
-	for i := 0; i < len(mat); i++ {
+	for i := range mat {
 		res[i] = make([]float64, len(mat[i]))
 		for j := 0; j < len(mat[i]); j++ {
 			res[i][j] = float64(mat[i][j])
@@ -49,7 +49,7 @@ func matf32Tof64(mat [][]float32) [][]float64 {
 
 func matf64Tof32(mat [][]float64) [][]float32 {
 	res := make([][]float32, len(mat))
-	for i := 0; i < len(mat); i++ {
+	for i := range mat {
 		res[i] = make([]float32, len(mat[i]))
 		for j := 0; j < len(mat[i]); j++ {
 			res[i][j] = float32(mat[i][j])
@@ -67,7 +67,7 @@ func HaarDWT2D(mat [][]float32, levels int) {
 		return
 	}
 	cols := len(mat[0])
-	for l := 0; l < levels; l++ {
+	for l := range levels {
 		h := rows >> uint(l)
 		w := cols >> uint(l)
 		if h < 2 || w < 2 {
@@ -81,8 +81,8 @@ func HaarDWT2D(mat [][]float32, levels int) {
 func haarRows(mat [][]float32, rows, cols int) {
 	half := cols / 2
 	tmp := make([]float32, cols)
-	for r := 0; r < rows; r++ {
-		for c := 0; c < half; c++ {
+	for r := range rows {
+		for c := range half {
 			tmp[c] = (mat[r][2*c] + mat[r][2*c+1]) / 2
 			tmp[half+c] = (mat[r][2*c] - mat[r][2*c+1]) / 2
 		}
@@ -93,12 +93,12 @@ func haarRows(mat [][]float32, rows, cols int) {
 func haarCols(mat [][]float32, rows, cols int) {
 	half := rows / 2
 	tmp := make([]float32, rows)
-	for c := 0; c < cols; c++ {
-		for r := 0; r < half; r++ {
+	for c := range cols {
+		for r := range half {
 			tmp[r] = (mat[2*r][c] + mat[2*r+1][c]) / 2
 			tmp[half+r] = (mat[2*r][c] - mat[2*r+1][c]) / 2
 		}
-		for r := 0; r < rows; r++ {
+		for r := range rows {
 			mat[r][c] = tmp[r]
 		}
 	}
@@ -108,11 +108,11 @@ func transpose(mat [][]float64) [][]float64 {
 	height := len(mat)
 	width := len(mat[0])
 	res := make([][]float64, height)
-	for i := 0; i < height; i++ {
+	for i := range height {
 		res[i] = make([]float64, width)
 	}
-	for i := 0; i < height; i++ {
-		for j := 0; j < width; j++ {
+	for i := range height {
+		for j := range width {
 			res[i][j] = mat[j][i]
 		}
 	}

@@ -84,8 +84,8 @@ func TestHaarDWT2D_oneLevel(t *testing.T) {
 		{3.5, 5.5},
 		{11.5, 13.5},
 	}
-	for r := 0; r < 2; r++ {
-		for c := 0; c < 2; c++ {
+	for r := range 2 {
+		for c := range 2 {
 			if math.Abs(float64(mat[r][c]-wantLL[r][c])) > 1e-5 {
 				t.Errorf("LL[%d][%d] = %v, want %v", r, c, mat[r][c], wantLL[r][c])
 			}

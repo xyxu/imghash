@@ -8,8 +8,8 @@ import (
 
 func makeTestImage(w, h int) *image.RGBA {
 	img := image.NewRGBA(image.Rect(0, 0, w, h))
-	for x := 0; x < w; x++ {
-		for y := 0; y < h; y++ {
+	for x := range w {
+		for y := range h {
 			img.Set(x, y, color.RGBA{uint8(x * 10), uint8(y * 10), 100, 255})
 		}
 	}
@@ -18,8 +18,8 @@ func makeTestImage(w, h int) *image.RGBA {
 
 func makeGrayTestImage(w, h int) *image.Gray {
 	img := image.NewGray(image.Rect(0, 0, w, h))
-	for x := 0; x < w; x++ {
-		for y := 0; y < h; y++ {
+	for x := range w {
+		for y := range h {
 			img.SetGray(x, y, color.Gray{uint8((x + y) * 10)})
 		}
 	}

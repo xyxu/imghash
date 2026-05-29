@@ -84,9 +84,9 @@ func (mhh MarrHildreth) Calculate(img image.Image) (hashtype.Hash, error) {
 // Compute sums of blocks.
 func (mhh MarrHildreth) blocksSum(img [][]float32) [][]float32 {
 	blocks := make([][]float32, mhNumBlocks)
-	for r := 0; r < mhNumBlocks; r++ {
+	for r := range mhNumBlocks {
 		blocks[r] = make([]float32, mhNumBlocks)
-		for c := 0; c < mhNumBlocks; c++ {
+		for c := range mhNumBlocks {
 			var sum float32
 			for roiR := r * mhBlockSize; roiR < r*mhBlockSize+mhBlockSize; roiR++ {
 				for roiC := c * mhBlockSize; roiC < c*mhBlockSize+mhBlockSize; roiC++ {

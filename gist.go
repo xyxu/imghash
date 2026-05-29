@@ -60,9 +60,9 @@ func (g GIST) normalizeGray(img *image.Gray) [][]float64 {
 	ox, oy := bounds.Min.X, bounds.Min.Y
 	mat := make([][]float64, h)
 	var mean float64
-	for y := 0; y < h; y++ {
+	for y := range h {
 		mat[y] = make([]float64, w)
-		for x := 0; x < w; x++ {
+		for x := range w {
 			v := float64(img.GrayAt(x+ox, y+oy).Y) / 255
 			mat[y][x] = v
 			mean += v
@@ -76,8 +76,8 @@ func (g GIST) normalizeGray(img *image.Gray) [][]float64 {
 	mean /= n
 
 	var variance float64
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			d := mat[y][x] - mean
 			variance += d * d
 		}
@@ -87,8 +87,8 @@ func (g GIST) normalizeGray(img *image.Gray) [][]float64 {
 		std = 1
 	}
 
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
+	for y := range h {
+		for x := range w {
 			mat[y][x] = (mat[y][x] - mean) / std
 		}
 	}
@@ -107,9 +107,9 @@ func (g GIST) computeDescriptor(img [][]float64) []float64 {
 
 	gridX, gridY := int(g.gridX), int(g.gridY)
 	cellCounts := make([]int, gridX*gridY)
-	for y := 0; y < h; y++ {
+	for y := range h {
 		by := y * gridY / h
-		for x := 0; x < w; x++ {
+		for x := range w {
 			bx := x * gridX / w
 			cellCounts[by*gridX+bx]++
 		}
@@ -124,7 +124,7 @@ func (g GIST) computeDescriptor(img [][]float64) []float64 {
 	wavelengths := []float64{4, 8, 12}
 	for s, nOrient := range gistOrientationsPerScale {
 		wavelength := wavelengths[s]
-		for o := 0; o < nOrient; o++ {
+		for o := range nOrient {
 			theta := float64(o) * math.Pi / float64(nOrient)
 			kReal, kImag := gistGaborKernel(theta, wavelength)
 			cellSums := gistFilterPool(img, kReal, kImag, gridX, gridY)
@@ -155,10 +155,7 @@ func (g GIST) computeDescriptor(img [][]float64) []float64 {
 func gistGaborKernel(theta, wavelength float64) ([][]float64, [][]float64) {
 	sigma := 0.56 * wavelength
 	gamma := 0.5
-	radius := int(math.Ceil(2 * sigma))
-	if radius < 3 {
-		radius = 3
-	}
+	radius := max(int(math.Ceil(2*sigma)), 3)
 	if radius > 9 {
 		radius = 9
 	}
@@ -210,13 +207,13 @@ func gistFilterPool(img, kReal, kImag [][]float64, gridX, gridY int) []float64 {
 	rx := kw / 2
 
 	cellSums := make([]float64, gridX*gridY)
-	for y := 0; y < h; y++ {
+	for y := range h {
 		by := y * gridY / h
-		for x := 0; x < w; x++ {
+		for x := range w {
 			var sumR, sumI float64
-			for ky := 0; ky < kh; ky++ {
+			for ky := range kh {
 				iy := gistReflect101(y+ky-ry, h)
-				for kx := 0; kx < kw; kx++ {
+				for kx := range kw {
 					ix := gistReflect101(x+kx-rx, w)
 					p := img[iy][ix]
 					sumR += p * kReal[ky][kx]

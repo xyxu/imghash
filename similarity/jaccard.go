@@ -37,10 +37,7 @@ func Jaccard(h1, h2 hashtype.Hash) (Distance, error) {
 }
 
 func jaccardBinary(h1, h2 hashtype.Binary) Distance {
-	l := len(h1)
-	if len(h2) < l {
-		l = len(h2)
-	}
+	l := min(len(h2), len(h1))
 
 	var inter, union int
 	for i := 0; i < l; i++ {

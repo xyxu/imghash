@@ -38,7 +38,7 @@ func (h Float64) Equal(fh Float64) bool {
 		return false
 	}
 	eps := math.Nextafter(1.0, 2.0) - 1.0
-	for i := 0; i < len(fh); i++ {
+	for i := range fh {
 		if math.Abs(h[i]-fh[i]) > eps {
 			return false
 		}

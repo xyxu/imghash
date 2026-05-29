@@ -23,10 +23,7 @@ func WeightedHamming(h1, h2 hashtype.Hash, weights []float64) (Distance, error) 
 	if !ok {
 		return 0, ErrNotBinaryHash
 	}
-	l := len(b1)
-	if len(b2) < l {
-		l = len(b2)
-	}
+	l := min(len(b2), len(b1))
 	if len(weights) != l {
 		return 0, ErrWeightLengthMismatch
 	}

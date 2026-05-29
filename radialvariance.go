@@ -70,10 +70,7 @@ func createOffset(size int) int {
 func (rv RadialVariance) radialProjections(img *image.Gray) ([]uint8, []int32, int) {
 	bounds := img.Bounds()
 	w, h := bounds.Dx(), bounds.Dy()
-	dim := h
-	if w > h {
-		dim = w
-	}
+	dim := max(w, h)
 	proj := make([]uint8, dim*rv.angles)
 	pixPerLine := make([]int32, rv.angles)
 	xOff, yOff := createOffset(w), createOffset(h)
@@ -126,7 +123,7 @@ func (rv RadialVariance) findFeatureVector(proj []uint8, ppl []int32, dim int) [
 		// will cause NaN value and make the features become less discriminative
 		// to avoid this problem, I add a small value.
 		pNum := float64(ppl[k]) + 0.00001
-		for i := 0; i < dim; i++ {
+		for i := range dim {
 			val := float64(proj[k*dim+i])
 			lSum += val
 			lSqSum += val * val
@@ -147,9 +144,9 @@ func (rv RadialVariance) computeHash(feat []float64) hashtype.UInt8 {
 	hash := make(hashtype.UInt8, hashSize)
 	temp := make([]float64, hashSize)
 	var hi, lo float64
-	for i := 0; i < hashSize; i++ {
+	for i := range hashSize {
 		var sum float64
-		for j := 0; j < len(feat); j++ {
+		for j := range feat {
 			sum += feat[j] * math.Cos((math.Pi*float64(2*j+1)*float64(i))/float64(2*len(feat)))
 		}
 		if i == 0 {
@@ -167,7 +164,7 @@ func (rv RadialVariance) computeHash(feat []float64) hashtype.UInt8 {
 	if r == 0 {
 		return hash
 	}
-	for i := 0; i < hashSize; i++ {
+	for i := range hashSize {
 		hash[i] = uint8((255 * (temp[i] - lo) / r))
 	}
 	return hash
