@@ -1,9 +1,11 @@
 package imghash
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"math"
+	"math/big"
 
 	"github.com/ajdnik/imghash/v2/hashtype"
 	"github.com/ajdnik/imghash/v2/internal/imgproc"
@@ -106,6 +108,19 @@ func (ch ColorHash) Calculate(img image.Image) (hashtype.Hash, error) {
 		}
 	}
 	return hash, nil
+}
+
+// Hex returns the hex string representation of a ColorHash hash,
+// compatible with Johannes Buchner's Python imagehash.colorhash.
+func (ch ColorHash) Hex(hash hashtype.Binary) string {
+	totalBits := colorHashBins * ch.binBits
+	n := new(big.Int).SetBytes([]byte(hash))
+	unusedBits := (8 - totalBits%8) % 8
+	if unusedBits > 0 {
+		n.Rsh(n, unusedBits)
+	}
+	width := int((totalBits + 3) / 4)
+	return fmt.Sprintf("%0*x", width, n)
 }
 
 // Compare computes the Hamming distance between two ColorHash hashes.
