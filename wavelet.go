@@ -40,19 +40,20 @@ func NewWHash(opts ...WHashOption) (WHash, error) {
 }
 
 // Calculate returns a perceptual image hash.
+// It matches the Python imagehash.whash implementation:
+// grayscale → PIL-compatible Lanczos resize → Haar DWT → median threshold.
 func (wh WHash) Calculate(img image.Image) (hashtype.Hash, error) {
-	// Resize to (width * 2^level) x (height * 2^level) so that after
-	// `level` DWT passes the LL subband is exactly width×height.
 	scale := uint(1) << uint(wh.level)
 	rw := wh.width * scale
 	rh := wh.height * scale
 
-	r := imgproc.Resize(rw, rh, img, wh.interp.resizeType())
-	g, err := imgproc.Grayscale(r)
+	g, err := imgproc.Grayscale(img)
 	if err != nil {
 		return nil, err
 	}
-	mat := imgproc.GrayToF32(g)
+
+	r := imgproc.ResizePIL(g, int(rw), int(rh))
+	mat := imgproc.GrayToF32(r)
 	imgproc.HaarDWT2D(mat, wh.level)
 
 	ll := wh.extractLL(mat)
