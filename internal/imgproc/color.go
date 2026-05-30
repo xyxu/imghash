@@ -9,9 +9,9 @@ import (
 // ErrImageIsNil is returned when a nil image is passed to a conversion function.
 var ErrImageIsNil = errors.New("image argument is nil")
 
-// Grayscale converts an image to 8-bit grayscale.
-// Fully transparent pixels (alpha == 0) are set to 0 (black),
-// matching the behavior of PIL's image.convert('L') for GIF transparency.
+// Grayscale converts an image to 8-bit grayscale using the standard ITU-R
+// BT.601 luminance formula. Alpha is ignored — matching PIL's convert('L')
+// behavior which computes luminance from palette RGB regardless of transparency.
 func Grayscale(img image.Image) (*image.Gray, error) {
 	if img == nil {
 		return nil, ErrImageIsNil
@@ -20,13 +20,9 @@ func Grayscale(img image.Image) (*image.Gray, error) {
 	gray := image.NewGray(bounds)
 	for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
 		for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
-			r, g, b, a := img.At(x, y).RGBA()
-			if a == 0 {
-				gray.SetGray(x, y, color.Gray{Y: 0})
-			} else {
-				yVal := uint8((19595*r + 38470*g + 7471*b + 1<<15) >> 24)
-				gray.SetGray(x, y, color.Gray{Y: yVal})
-			}
+			r, g, b, _ := img.At(x, y).RGBA()
+			yVal := uint8((19595*r + 38470*g + 7471*b + 1<<15) >> 24)
+			gray.SetGray(x, y, color.Gray{Y: yVal})
 		}
 	}
 	return gray, nil
