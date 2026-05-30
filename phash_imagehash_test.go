@@ -13,12 +13,12 @@ var pHashImgHashCalculateTests = []struct {
 	filename string
 	hash     hashtype.Binary
 }{
-	{"assets/lena.jpg", hashtype.Binary{153, 99, 106, 180, 174, 204, 69, 105}},
-	{"assets/baboon.jpg", hashtype.Binary{251, 4, 6, 190, 248, 5, 27, 241}},
-	{"assets/cat.jpg", hashtype.Binary{171, 211, 225, 61, 42, 18, 166, 85}},
-	{"assets/monarch.jpg", hashtype.Binary{151, 222, 38, 63, 25, 105, 128, 198}},
-	{"assets/peppers.jpg", hashtype.Binary{197, 253, 62, 8, 227, 136, 19, 155}},
-	{"assets/tulips.jpg", hashtype.Binary{163, 117, 194, 93, 55, 122, 48, 37}},
+	{"assets/lena.jpg", hashtype.Binary{153, 198, 86, 45, 117, 51, 162, 150}},
+	{"assets/baboon.jpg", hashtype.Binary{223, 32, 96, 125, 31, 160, 216, 143}},
+	{"assets/cat.jpg", hashtype.Binary{213, 203, 135, 188, 84, 72, 101, 170}},
+	{"assets/monarch.jpg", hashtype.Binary{233, 123, 100, 252, 152, 150, 1, 99}},
+	{"assets/peppers.jpg", hashtype.Binary{163, 191, 124, 16, 199, 17, 200, 217}},
+	{"assets/tulips.jpg", hashtype.Binary{197, 174, 67, 186, 236, 94, 12, 164}},
 }
 
 func TestPHashImageHash_Calculate(t *testing.T) {
@@ -53,7 +53,7 @@ func ExamplePHashImageHash_Calculate() {
 	}
 
 	fmt.Println(hash)
-	// Output: [171 211 225 61 42 18 166 85]
+	// Output: [213 203 135 188 84 72 101 170]
 }
 
 var pHashImgHashDistanceTests = []struct {

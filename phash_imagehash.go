@@ -69,7 +69,7 @@ func pHashImgHashCompute(img [][]float32) hashtype.Binary {
 	for i := range img {
 		for j := range img[i] {
 			if img[i][j] != 0 {
-				hash.Set(c)
+				hash.SetReverse(c)
 			}
 			c++
 		}
