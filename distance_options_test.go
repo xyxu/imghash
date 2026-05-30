@@ -61,19 +61,6 @@ var compareCases = []compareCase{
 		invalidLen2:  hashtype.Binary{0x00, 0xFF},
 	},
 	{
-		name:         "PHash",
-		buildDefault: func() (imghash.Comparer, error) { return imghash.NewPHash() },
-		buildWithDistance: func(fn imghash.DistanceFunc) (imghash.Comparer, error) {
-			return imghash.NewPHash(imghash.WithDistance(fn))
-		},
-		valid1:       hashtype.Binary{0x00, 0xFF},
-		valid2:       hashtype.Binary{0xFF, 0x00},
-		invalidType1: hashtype.UInt8{1, 2},
-		invalidType2: hashtype.UInt8{3, 4},
-		invalidLen1:  hashtype.Binary{0x00},
-		invalidLen2:  hashtype.Binary{0x00, 0xFF},
-	},
-	{
 		name:         "WHash",
 		buildDefault: func() (imghash.Comparer, error) { return imghash.NewWHash() },
 		buildWithDistance: func(fn imghash.DistanceFunc) (imghash.Comparer, error) {
@@ -355,36 +342,4 @@ func TestWithDistance_errorPropagation(t *testing.T) {
 	}
 }
 
-func TestWithWeights_affectsPHashCompare(t *testing.T) {
-	ph, err := imghash.NewPHash(imghash.WithWeights([]float64{2}))
-	if err != nil {
-		t.Fatalf("failed to create hasher: %v", err)
-	}
 
-	got, err := ph.Compare(hashtype.Binary{1}, hashtype.Binary{2})
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if !got.Equal(4) {
-		t.Fatalf("got %v, want 4", got)
-	}
-}
-
-func TestWithWeights_clonesCallerSlice(t *testing.T) {
-	weights := []float64{2}
-	opt := imghash.WithWeights(weights)
-	weights[0] = 100
-
-	ph, err := imghash.NewPHash(opt)
-	if err != nil {
-		t.Fatalf("failed to create hasher: %v", err)
-	}
-
-	got, err := ph.Compare(hashtype.Binary{1}, hashtype.Binary{2})
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if !got.Equal(4) {
-		t.Fatalf("got %v, want 4", got)
-	}
-}

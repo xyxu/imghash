@@ -35,13 +35,6 @@ func TestWithInterpolation_invalidValue(t *testing.T) {
 			},
 		},
 		{
-			name: "PHash",
-			new: func() error {
-				_, err := imghash.NewPHash(imghash.WithInterpolation(invalid))
-				return err
-			},
-		},
-		{
 			name: "BlockMean",
 			new: func() error {
 				_, err := imghash.NewBlockMean(imghash.WithInterpolation(invalid))

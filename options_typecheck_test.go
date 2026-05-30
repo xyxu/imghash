@@ -16,11 +16,6 @@ var _ MedianOption = WithSize(0, 0)
 var _ MedianOption = WithInterpolation(Bilinear)
 var _ MedianOption = WithDistance(nil)
 
-var _ PHashOption = WithSize(0, 0)
-var _ PHashOption = WithInterpolation(Bilinear)
-var _ PHashOption = WithWeights(nil)
-var _ PHashOption = WithDistance(nil)
-
 var _ BlockMeanOption = WithSize(0, 0)
 var _ BlockMeanOption = WithInterpolation(Bilinear)
 var _ BlockMeanOption = WithBlockSize(0, 0)

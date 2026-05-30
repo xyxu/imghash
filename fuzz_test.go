@@ -69,7 +69,7 @@ func FuzzPHashCalculate(f *testing.F) {
 		if img == nil {
 			return
 		}
-		h, _ := NewPHash()
+		h := NewPHash()
 		h.Calculate(img) //nolint:errcheck
 	})
 }

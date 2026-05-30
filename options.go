@@ -27,9 +27,6 @@ type DifferenceOption interface{ applyDifference(*Difference) }
 // MedianOption configures the Median hash algorithm.
 type MedianOption interface{ applyMedian(*Median) }
 
-// PHashOption configures the PHash algorithm.
-type PHashOption interface{ applyPHash(*PHash) }
-
 // BlockMeanOption configures the BlockMean hash algorithm.
 type BlockMeanOption interface{ applyBlockMean(*BlockMean) }
 
@@ -83,7 +80,6 @@ type DistanceOption interface {
 	AverageOption
 	DifferenceOption
 	MedianOption
-	PHashOption
 	BlockMeanOption
 	MarrHildrethOption
 	RadialVarianceOption
@@ -106,7 +102,6 @@ type distanceOption struct{ fn DistanceFunc }
 func (o distanceOption) applyAverage(a *Average)               { a.distFunc = o.fn }
 func (o distanceOption) applyDifference(d *Difference)         { d.distFunc = o.fn }
 func (o distanceOption) applyMedian(m *Median)                 { m.distFunc = o.fn }
-func (o distanceOption) applyPHash(p *PHash)                   { p.distFunc = o.fn }
 func (o distanceOption) applyBlockMean(b *BlockMean)           { b.distFunc = o.fn }
 func (o distanceOption) applyMarrHildreth(m *MarrHildreth)     { m.distFunc = o.fn }
 func (o distanceOption) applyRadialVariance(r *RadialVariance) { r.distFunc = o.fn }
@@ -130,7 +125,6 @@ type SizeOption interface {
 	AverageOption
 	DifferenceOption
 	MedianOption
-	PHashOption
 	BlockMeanOption
 	MarrHildrethOption
 	ColorMomentOption
@@ -160,7 +154,6 @@ func (o sizeOption) applyBase(b *baseConfig)           { b.width, b.height = o.w
 func (o sizeOption) applyAverage(a *Average)           { o.applyBase(&a.baseConfig) }
 func (o sizeOption) applyDifference(d *Difference)     { o.applyBase(&d.baseConfig) }
 func (o sizeOption) applyMedian(m *Median)             { o.applyBase(&m.baseConfig) }
-func (o sizeOption) applyPHash(p *PHash)               { o.applyBase(&p.baseConfig) }
 func (o sizeOption) applyBlockMean(b *BlockMean)       { o.applyBase(&b.baseConfig) }
 func (o sizeOption) applyMarrHildreth(m *MarrHildreth) { o.applyBase(&m.baseConfig) }
 func (o sizeOption) applyColorMoment(c *ColorMoment)   { o.applyBase(&c.baseConfig) }
@@ -179,7 +172,6 @@ type InterpolationOption interface {
 	AverageOption
 	DifferenceOption
 	MedianOption
-	PHashOption
 	BlockMeanOption
 	MarrHildrethOption
 	ColorMomentOption
@@ -201,7 +193,6 @@ func (o interpolationOption) applyBase(b *baseConfig)           { b.interp = o.i
 func (o interpolationOption) applyAverage(a *Average)           { o.applyBase(&a.baseConfig) }
 func (o interpolationOption) applyDifference(d *Difference)     { o.applyBase(&d.baseConfig) }
 func (o interpolationOption) applyMedian(m *Median)             { o.applyBase(&m.baseConfig) }
-func (o interpolationOption) applyPHash(p *PHash)               { o.applyBase(&p.baseConfig) }
 func (o interpolationOption) applyBlockMean(b *BlockMean)       { o.applyBase(&b.baseConfig) }
 func (o interpolationOption) applyMarrHildreth(m *MarrHildreth) { o.applyBase(&m.baseConfig) }
 func (o interpolationOption) applyColorMoment(c *ColorMoment)   { o.applyBase(&c.baseConfig) }
@@ -345,15 +336,6 @@ type degreeOption struct{ degree int }
 
 func (o degreeOption) applyZernike(z *Zernike) { z.degree = o.degree }
 
-// WeightsOption sets the per-byte weights for weighted distance.
-type WeightsOption interface {
-	PHashOption
-}
-
-type weightsOption struct{ weights []float64 }
-
-func (o weightsOption) applyPHash(p *PHash) { p.weights = append([]float64(nil), o.weights...) }
-
 // BoVWFeatureOption sets the local feature extractor for BoVW.
 type BoVWFeatureOption interface {
 	BoVWOption
@@ -411,13 +393,13 @@ func (o simHashBitsOption) applyBoVW(b *BoVW) { b.simHashBits = o.bits }
 // --- public constructors ---
 
 // WithSize sets the resize dimensions used during hash computation.
-// Applies to Average, Difference, Median, PHash, BlockMean, MarrHildreth, ColorMoment, CLD, EHD, WHash, LBP, HOGHash, BoVW, RASH, Zernike, and GIST.
+// Applies to Average, Difference, Median, BlockMean, MarrHildreth, ColorMoment, CLD, EHD, WHash, LBP, HOGHash, BoVW, RASH, Zernike, and GIST.
 func WithSize(width, height uint) SizeOption {
 	return sizeOption{width, height}
 }
 
 // WithInterpolation sets the resize interpolation method.
-// Applies to Average, Difference, Median, PHash, BlockMean, MarrHildreth, ColorMoment, CLD, EHD, WHash, LBP, HOGHash, BoVW, PDQ, RASH, Zernike, and GIST.
+// Applies to Average, Difference, Median, BlockMean, MarrHildreth, ColorMoment, CLD, EHD, WHash, LBP, HOGHash, BoVW, PDQ, RASH, Zernike, and GIST.
 func WithInterpolation(interp Interpolation) InterpolationOption {
 	return interpolationOption{interp}
 }
@@ -499,13 +481,6 @@ func WithRings(rings int) RingsOption {
 // Applies to Zernike.
 func WithDegree(degree int) DegreeOption {
 	return degreeOption{degree}
-}
-
-// WithWeights sets the per-byte weights used for weighted Hamming distance.
-// The slice length must match the number of hash bytes (8 for default PHash).
-// Applies to PHash.
-func WithWeights(weights []float64) WeightsOption {
-	return weightsOption{append([]float64(nil), weights...)}
 }
 
 // WithBoVWFeature sets the local feature extractor used by BoVW.
