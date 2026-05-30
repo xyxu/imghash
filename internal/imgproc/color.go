@@ -10,6 +10,8 @@ import (
 var ErrImageIsNil = errors.New("image argument is nil")
 
 // Grayscale converts an image to 8-bit grayscale.
+// Fully transparent pixels (alpha == 0) are set to 0 (black),
+// matching the behavior of PIL's image.convert('L') for GIF transparency.
 func Grayscale(img image.Image) (*image.Gray, error) {
 	if img == nil {
 		return nil, ErrImageIsNil
@@ -18,7 +20,13 @@ func Grayscale(img image.Image) (*image.Gray, error) {
 	gray := image.NewGray(bounds)
 	for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
 		for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
-			gray.Set(x, y, img.At(x, y))
+			r, g, b, a := img.At(x, y).RGBA()
+			if a == 0 {
+				gray.SetGray(x, y, color.Gray{Y: 0})
+			} else {
+				yVal := uint8((19595*r + 38470*g + 7471*b + 1<<15) >> 24)
+				gray.SetGray(x, y, color.Gray{Y: yVal})
+			}
 		}
 	}
 	return gray, nil
