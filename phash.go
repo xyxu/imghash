@@ -12,8 +12,11 @@ import (
 // An 8x8 block produces a 64-bit (8-byte) binary hash.
 const dctCoefSize = 8
 
-// PHash is a perceptual hash that uses the method described in
-// Implementation and Benchmarking of Perceptual Image Hash Functions; Zauner et. al.
+const phashHighfreqFactor = 4
+
+// PHash is a perceptual hash that matches Python imagehash.phash.
+// It uses the same algorithm: grayscale → PIL-compatible Lanczos resize
+// (hash_size × highfreq_factor) → unnormalized 2D DCT → median threshold.
 //
 // See https://www.researchgate.net/publication/252340846_Rihamark_Perceptual_image_hash_benchmarking for more information.
 type PHash struct {
@@ -23,11 +26,11 @@ type PHash struct {
 	distFunc DistanceFunc
 }
 
-// NewPHash creates a new PHash with the given options.
-// Without options, sensible defaults are used.
+// NewPHash creates a new PHash matching Python imagehash.phash.
+// Default hash_size is 8 (from 32/4), producing a 64-bit hash.
 func NewPHash(opts ...PHashOption) (PHash, error) {
 	p := PHash{
-		baseConfig: baseConfig{width: 32, height: 32, interp: BilinearExact},
+		baseConfig: baseConfig{width: 32, height: 32, interp: Bilinear},
 	}
 	for _, o := range opts {
 		o.applyPHash(&p)
@@ -44,31 +47,30 @@ func NewPHash(opts ...PHashOption) (PHash, error) {
 	return p, nil
 }
 
-// Calculate returns a perceptual image hash.
+// Calculate returns a perceptual image hash matching Python imagehash.phash.
 func (ph PHash) Calculate(img image.Image) (hashtype.Hash, error) {
-	r := imgproc.Resize(ph.width, ph.height, img, ph.interp.resizeType())
-	g, err := imgproc.Grayscale(r)
+	g, err := imgproc.Grayscale(img)
 	if err != nil {
 		return nil, err
 	}
-	fImg := imgproc.GrayToF32(g)
-	dctImg := imgproc.DCT(fImg)
-	tLeft := ph.topLeft(dctImg)
-	// Remove the strongest frequency
-	tLeft[0][0] = 0
-	mean := ph.mean(tLeft)
-	bitImg := ph.compare(tLeft, mean)
-	return ph.computeHash(bitImg), nil
+	r := imgproc.ResizePIL(g, int(ph.width), int(ph.height))
+	fImg := imgproc.GrayToF32(r)
+	dctImg := imgproc.DCTUnnormalized2D(fImg)
+	hashSize := int(ph.width / phashHighfreqFactor)
+	tLeft := ph.topLeft(dctImg, hashSize)
+	med := imgproc.MedianF32(tLeft)
+	bitImg := ph.compare(tLeft, med)
+	return ph.computeHash(bitImg, hashSize), nil
 }
 
 // Computes the binary hash based on the binary image supplied.
-func (ph PHash) computeHash(img [][]float32) hashtype.Binary {
-	hash := make(hashtype.Binary, dctCoefSize)
+func (ph PHash) computeHash(img [][]float32, hashSize int) hashtype.Binary {
+	hash := make(hashtype.Binary, hashSize)
 	var c uint
 	for i := range img {
 		for j := range img[i] {
 			if img[i][j] != 0 {
-				_ = hash.Set(c)
+				_ = hash.SetReverse(c)
 			}
 			c++
 		}
@@ -77,25 +79,12 @@ func (ph PHash) computeHash(img [][]float32) hashtype.Binary {
 }
 
 // Extract top left block from supplied image.
-func (ph PHash) topLeft(img [][]float32) [][]float32 {
-	tL := make([][]float32, dctCoefSize)
+func (ph PHash) topLeft(img [][]float32, size int) [][]float32 {
+	tL := make([][]float32, size)
 	for i := range tL {
-		tL[i] = img[i][0:dctCoefSize]
+		tL[i] = img[i][0:size]
 	}
 	return tL
-}
-
-// Compute mean of the supplied image.
-func (ph PHash) mean(img [][]float32) float32 {
-	var c int
-	var s float32
-	for i := range img {
-		c += len(img[i])
-		for j := range img[i] {
-			s += img[i][j]
-		}
-	}
-	return s / float32(c)
 }
 
 // Build a binary image by comparing the value to the supplied image.

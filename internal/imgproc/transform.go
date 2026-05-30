@@ -1,8 +1,13 @@
 package imgproc
 
-import "math"
+import (
+	"image"
+	"math"
+	"slices"
+)
 
-// DCT computes a 2-D orthogonal DCT-II on a float32 matrix.
+var _ = getSize
+
 func DCT(mat [][]float32) [][]float32 {
 	mat64 := matf32Tof64(mat)
 	for i := range mat64 {
@@ -16,7 +21,6 @@ func DCT(mat [][]float32) [][]float32 {
 	return matf64Tof32(mat64)
 }
 
-// dctOrthogonal computes a 1-D orthogonal DCT-II.
 func dctOrthogonal(x []float64) []float64 {
 	n := len(x)
 	c0 := math.Sqrt(1.0 / float64(n))
@@ -58,9 +62,8 @@ func matf64Tof32(mat [][]float64) [][]float32 {
 	return res
 }
 
-// HaarDWT2D applies a multi-level 2-D Haar discrete wavelet transform
-// in-place on the top-left region of mat. After `levels` iterations the
-// top-left (rows/2^levels)×(cols/2^levels) block holds the LL coefficients.
+// --- float32 Haar DWT (used by non-WHash algorithms) ---
+
 func HaarDWT2D(mat [][]float32, levels int) {
 	rows := len(mat)
 	if rows == 0 {
@@ -102,6 +105,175 @@ func haarCols(mat [][]float32, rows, cols int) {
 			mat[r][c] = tmp[r]
 		}
 	}
+}
+
+func InverseHaarDWT2D(mat [][]float32, levels int) {
+	rows := len(mat)
+	if rows == 0 {
+		return
+	}
+	cols := len(mat[0])
+	for l := levels - 1; l >= 0; l-- {
+		h := rows >> uint(l)
+		w := cols >> uint(l)
+		if h < 2 || w < 2 {
+			continue
+		}
+		inverseHaarCols(mat, h, w)
+		inverseHaarRows(mat, h, w)
+	}
+}
+
+func inverseHaarRows(mat [][]float32, rows, cols int) {
+	half := cols / 2
+	tmp := make([]float32, cols)
+	for r := range rows {
+		copy(tmp, mat[r][:cols])
+		for c := range half {
+			avg := tmp[c]
+			diff := tmp[half+c]
+			mat[r][2*c] = avg + diff
+			mat[r][2*c+1] = avg - diff
+		}
+	}
+}
+
+func inverseHaarCols(mat [][]float32, rows, cols int) {
+	half := rows / 2
+	for c := range cols {
+		tmp := make([]float32, rows)
+		for r := range rows {
+			tmp[r] = mat[r][c]
+		}
+		for r := range half {
+			avg := tmp[r]
+			diff := tmp[half+r]
+			mat[2*r][c] = avg + diff
+			mat[2*r+1][c] = avg - diff
+		}
+	}
+}
+
+// --- float64 Haar DWT (used by WHash for Python compatibility) ---
+
+var invSqrt2 = 1.0 / math.Sqrt2
+
+func HaarDWT2DF64(mat [][]float64, levels int) {
+	rows := len(mat)
+	if rows == 0 {
+		return
+	}
+	cols := len(mat[0])
+	for l := range levels {
+		h := rows >> uint(l)
+		w := cols >> uint(l)
+		if h < 2 || w < 2 {
+			break
+		}
+		haar2DF64level(mat, h, w)
+	}
+}
+
+func haar2DF64level(mat [][]float64, rows, cols int) {
+	halfR := rows / 2
+	tmpC := make([]float64, rows)
+	for c := range cols {
+		for r := range halfR {
+			a := mat[2*r][c]
+			b := mat[2*r+1][c]
+			tmpC[r] = a*invSqrt2 + b*invSqrt2
+			tmpC[halfR+r] = a*invSqrt2 - b*invSqrt2
+		}
+		for r := range rows {
+			mat[r][c] = tmpC[r]
+		}
+	}
+
+	halfC := cols / 2
+	tmpR := make([]float64, cols)
+	for r := range rows {
+		for c := range halfC {
+			a := mat[r][2*c]
+			b := mat[r][2*c+1]
+			tmpR[c] = a*invSqrt2 + b*invSqrt2
+			tmpR[halfC+c] = a*invSqrt2 - b*invSqrt2
+		}
+		copy(mat[r][:cols], tmpR)
+	}
+}
+
+func InverseHaarDWT2DF64(mat [][]float64, levels int) {
+	rows := len(mat)
+	if rows == 0 {
+		return
+	}
+	cols := len(mat[0])
+	for l := levels - 1; l >= 0; l-- {
+		h := rows >> uint(l)
+		w := cols >> uint(l)
+		if h < 2 || w < 2 {
+			continue
+		}
+		inverseHaar2DF64level(mat, h, w)
+	}
+}
+
+func inverseHaar2DF64level(mat [][]float64, rows, cols int) {
+	halfC := cols / 2
+	tmpR := make([]float64, cols)
+	for r := range rows {
+		copy(tmpR, mat[r][:cols])
+		for c := range halfC {
+			avg := tmpR[c]
+			diff := tmpR[halfC+c]
+			mat[r][2*c] = avg*invSqrt2 + diff*invSqrt2
+			mat[r][2*c+1] = avg*invSqrt2 - diff*invSqrt2
+		}
+	}
+
+	halfR := rows / 2
+	for c := range cols {
+		tmpC := make([]float64, rows)
+		for r := range rows {
+			tmpC[r] = mat[r][c]
+		}
+		for r := range halfR {
+			avg := tmpC[r]
+			diff := tmpC[halfR+r]
+			mat[2*r][c] = avg*invSqrt2 + diff*invSqrt2
+			mat[2*r+1][c] = avg*invSqrt2 - diff*invSqrt2
+		}
+	}
+}
+
+func GrayToF64(img *image.Gray) [][]float64 {
+	bounds := img.Bounds()
+	width, height := getSize(img)
+	f64Img := make([][]float64, height)
+	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+		f64Img[y-bounds.Min.Y] = make([]float64, width)
+		for x := bounds.Min.X; x < bounds.Max.X; x++ {
+			pixel := img.GrayAt(x, y).Y
+			f64Img[y-bounds.Min.Y][x-bounds.Min.X] = float64(pixel)
+		}
+	}
+	return f64Img
+}
+
+func MedianF64(mat [][]float64) float64 {
+	var n int
+	for _, row := range mat {
+		n += len(row)
+	}
+	vals := make([]float64, 0, n)
+	for _, row := range mat {
+		vals = append(vals, row...)
+	}
+	slices.Sort(vals)
+	if n%2 == 0 {
+		return (vals[n/2-1] + vals[n/2]) / 2
+	}
+	return vals[n/2]
 }
 
 func transpose(mat [][]float64) [][]float64 {

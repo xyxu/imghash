@@ -2,11 +2,14 @@ package imghash
 
 import (
 	"image"
-	_ "image/gif"  // register GIF decoder
+	"image/color"
+	"image/draw"
+	"image/gif"
 	_ "image/jpeg" // register JPEG decoder
 	_ "image/png"  // register PNG decoder
 	"io"
 	"os"
+	"strings"
 
 	"github.com/xyxu/imghash/v2/hashtype"
 	"github.com/xyxu/imghash/v2/similarity"
@@ -14,7 +17,11 @@ import (
 
 // OpenImage reads and decodes an image from the given file path.
 // It supports JPEG, PNG, and GIF formats.
+// For GIF images, frames are composited onto a white canvas matching PIL behavior.
 func OpenImage(path string) (image.Image, error) {
+	if strings.HasSuffix(strings.ToLower(path), ".gif") {
+		return decodeGIF(path)
+	}
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -22,6 +29,37 @@ func OpenImage(path string) (image.Image, error) {
 	defer func() { _ = f.Close() }()
 	img, _, err := image.Decode(f)
 	return img, err
+}
+
+// decodeGIF decodes a GIF file and composites the first frame onto a white
+// canvas sized to the GIF's logical screen, matching PIL's behavior.
+func decodeGIF(path string) (image.Image, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	g, err := gif.DecodeAll(f)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(g.Image) == 0 {
+		return nil, ErrInvalidSize
+	}
+
+	w := g.Config.Width
+	h := g.Config.Height
+	if w <= 0 || h <= 0 {
+		return nil, ErrInvalidSize
+	}
+
+	canvas := image.NewRGBA(image.Rect(0, 0, w, h))
+	draw.Draw(canvas, canvas.Bounds(), &image.Uniform{color.White}, image.Point{}, draw.Src)
+	frame := g.Image[0]
+	draw.Draw(canvas, frame.Bounds(), frame, frame.Bounds().Min, draw.Over)
+	return canvas, nil
 }
 
 // DecodeImage decodes an image from the given reader.

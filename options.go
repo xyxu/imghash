@@ -544,6 +544,27 @@ func WithSimHashBits(bits uint) SimHashBitsOption {
 	return simHashBitsOption{bits: bits}
 }
 
+// WithRemoveMaxHaarLL sets whether to remove the lowest low-frequency (LL)
+// Haar wavelet coefficient before computing the hash. Default is true,
+// matching Python imagehash.whash.
+// Applies to WHash.
+func WithRemoveMaxHaarLL(remove bool) RemoveMaxHaarLLOption {
+	return removeMaxHaarLLOption{remove: remove}
+}
+
+// RemoveMaxHaarLLOption configures the wavelet LL removal step.
+type RemoveMaxHaarLLOption interface {
+	WHashOption
+}
+
+type removeMaxHaarLLOption struct {
+	remove bool
+}
+
+func (o removeMaxHaarLLOption) applyWHash(w *WHash) {
+	w.removeMaxHaarLL = o.remove
+}
+
 // WithBinBits sets the number of bits used to encode each ColorHash bin.
 // Applies to ColorHash.
 func WithBinBits(bits uint) BinBitsOption {

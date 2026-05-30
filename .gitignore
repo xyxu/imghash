@@ -14,5 +14,9 @@
 # Dependencies
 vendor
 
+# CLI binary (built from cmd/imghash)
+imghash
+imghash.exe
+
 # MacOS
 .DS_Store

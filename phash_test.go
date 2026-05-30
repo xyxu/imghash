@@ -11,24 +11,23 @@ import (
 )
 
 var pHashCalculateTests = []struct {
-	filename   string
-	hash       hashtype.Binary
-	width      uint
-	height     uint
-	resizeType imghash.Interpolation
+	filename string
+	hash     hashtype.Binary
+	width    uint
+	height   uint
 }{
-	{"assets/lena.jpg", hashtype.Binary{152, 99, 42, 180, 174, 196, 69, 105}, 32, 32, imghash.BilinearExact},
-	{"assets/baboon.jpg", hashtype.Binary{251, 4, 6, 190, 248, 133, 91, 241}, 32, 32, imghash.BilinearExact},
-	{"assets/cat.jpg", hashtype.Binary{170, 195, 65, 29, 10, 2, 34, 84}, 32, 32, imghash.BilinearExact},
-	{"assets/monarch.jpg", hashtype.Binary{150, 222, 38, 63, 25, 105, 128, 70}, 32, 32, imghash.BilinearExact},
-	{"assets/peppers.jpg", hashtype.Binary{196, 245, 62, 8, 227, 136, 3, 155}, 32, 32, imghash.BilinearExact},
-	{"assets/tulips.jpg", hashtype.Binary{34, 117, 194, 95, 55, 122, 48, 37}, 32, 32, imghash.BilinearExact},
+	{"assets/lena.jpg", hashtype.Binary{153, 198, 86, 45, 117, 51, 162, 150}, 32, 32},
+	{"assets/baboon.jpg", hashtype.Binary{223, 32, 96, 125, 31, 160, 216, 143}, 32, 32},
+	{"assets/cat.jpg", hashtype.Binary{213, 203, 135, 188, 84, 72, 101, 170}, 32, 32},
+	{"assets/monarch.jpg", hashtype.Binary{233, 123, 100, 252, 152, 150, 1, 99}, 32, 32},
+	{"assets/peppers.jpg", hashtype.Binary{163, 191, 124, 16, 199, 17, 200, 217}, 32, 32},
+	{"assets/tulips.jpg", hashtype.Binary{197, 174, 67, 186, 236, 94, 12, 164}, 32, 32},
 }
 
 func TestPHash_Calculate(t *testing.T) {
 	for _, tt := range pHashCalculateTests {
 		t.Run(tt.filename, func(t *testing.T) {
-			hash, err := imghash.NewPHash(imghash.WithSize(tt.width, tt.height), imghash.WithInterpolation(tt.resizeType))
+			hash, err := imghash.NewPHash(imghash.WithSize(tt.width, tt.height))
 			if err != nil {
 				t.Fatalf("failed to create hasher: %v", err)
 			}
@@ -66,7 +65,7 @@ func ExamplePHash_Calculate() {
 	}
 
 	fmt.Println(hash)
-	// Output: [170 195 65 29 10 2 34 84]
+	// Output: [213 203 135 188 84 72 101 170]
 }
 
 var pHashDistanceTests = []struct {
@@ -75,19 +74,18 @@ var pHashDistanceTests = []struct {
 	distance    similarity.Distance
 	width       uint
 	height      uint
-	resizeType  imghash.Interpolation
 }{
-	{"assets/lena.jpg", "assets/cat.jpg", 31, 32, 32, imghash.BilinearExact},
-	{"assets/lena.jpg", "assets/monarch.jpg", 35, 32, 32, imghash.BilinearExact},
-	{"assets/baboon.jpg", "assets/cat.jpg", 34, 32, 32, imghash.BilinearExact},
-	{"assets/peppers.jpg", "assets/baboon.jpg", 33, 32, 32, imghash.BilinearExact},
-	{"assets/tulips.jpg", "assets/monarch.jpg", 29, 32, 32, imghash.BilinearExact},
+	{"assets/lena.jpg", "assets/cat.jpg", 30, 32, 32},
+	{"assets/lena.jpg", "assets/monarch.jpg", 36, 32, 32},
+	{"assets/baboon.jpg", "assets/cat.jpg", 34, 32, 32},
+	{"assets/peppers.jpg", "assets/baboon.jpg", 32, 32, 32},
+	{"assets/tulips.jpg", "assets/monarch.jpg", 30, 32, 32},
 }
 
 func TestPHash_Distance(t *testing.T) {
 	for _, tt := range pHashDistanceTests {
 		t.Run(fmt.Sprintf("%v %v", tt.firstImage, tt.secondImage), func(t *testing.T) {
-			hash, err := imghash.NewPHash(imghash.WithSize(tt.width, tt.height), imghash.WithInterpolation(tt.resizeType))
+			hash, err := imghash.NewPHash(imghash.WithSize(tt.width, tt.height))
 			if err != nil {
 				t.Fatalf("failed to create hasher: %v", err)
 			}
